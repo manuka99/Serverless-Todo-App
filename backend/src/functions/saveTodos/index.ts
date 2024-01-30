@@ -7,7 +7,7 @@ import {
   handleUnexpectedError,
 } from "lambda-hooks";
 import { getCognitoIdentityId } from "@libs/Helper";
-import { APIGatewayResponse } from "@libs/APIResponses";
+import { APIGatewayResponse, Response } from "@libs/APIResponses";
 
 const withHooks = useHooks({
   before: [logEvent, parseEvent],
@@ -15,10 +15,14 @@ const withHooks = useHooks({
   onError: [handleUnexpectedError],
 });
 
-const handler = async (event: APIGatewayProxyEvent) => {
+type ReqSaveTodo = {
+  description: string;
+};
+
+const handler = async (event: APIGatewayProxyEvent): Promise<Response> => {
   const cognitoIdentityId = getCognitoIdentityId(event);
-  const body = event?.body;
-  const description = body?.description;
+  const body: ReqSaveTodo = event?.body;
+  const description = body.description;
   if (!description) {
     return APIGatewayResponse.R400({
       error: "Description is required!",

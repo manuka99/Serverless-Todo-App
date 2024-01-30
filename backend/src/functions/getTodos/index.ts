@@ -8,7 +8,7 @@ import {
   handleUnexpectedError,
 } from "lambda-hooks";
 import { getCognitoIdentityId } from "@libs/Helper";
-import { APIGatewayResponse } from "@libs/APIResponses";
+import { APIGatewayResponse, Response } from "@libs/APIResponses";
 
 const withHooks = useHooks({
   before: [logEvent, parseEvent],
@@ -16,10 +16,10 @@ const withHooks = useHooks({
   onError: [handleUnexpectedError],
 });
 
-const handler = async (event: APIGatewayProxyEvent) => {
-  const cognitoIdentityId = getCognitoIdentityId(event)
+const handler = async (event: APIGatewayProxyEvent): Promise<Response> => {
+  const cognitoIdentityId = getCognitoIdentityId(event);
   const todos = await getTodosByUser(cognitoIdentityId);
-  return APIGatewayResponse.R200({data: todos});
+  return APIGatewayResponse.R200({ data: todos });
 };
 
 exports.handler = withHooks(handler);

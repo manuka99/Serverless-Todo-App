@@ -4,7 +4,7 @@ const HEADERS = {
   "Access-Control-Allow-Origin": "*",
 };
 
-interface Response {
+export interface Response {
   body: string;
   statusCode: number;
   headers: { [key: string]: string };
