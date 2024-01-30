@@ -1,5 +1,4 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { formatJSONResponse } from "@libs/APIResponses";
 import { getTodosByUser } from "@dao/todo.dao";
 
 import {
@@ -9,6 +8,7 @@ import {
   handleUnexpectedError,
 } from "lambda-hooks";
 import { getCognitoIdentityId } from "@libs/Helper";
+import { APIGatewayResponse } from "@libs/APIResponses";
 
 const withHooks = useHooks({
   before: [logEvent, parseEvent],
@@ -19,7 +19,7 @@ const withHooks = useHooks({
 const handler = async (event: APIGatewayProxyEvent) => {
   const cognitoIdentityId = getCognitoIdentityId(event)
   const todos = await getTodosByUser(cognitoIdentityId);
-  return formatJSONResponse({ body: todos });
+  return APIGatewayResponse.R200({data: todos});
 };
 
 exports.handler = withHooks(handler);

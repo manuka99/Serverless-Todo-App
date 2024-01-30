@@ -1,5 +1,4 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { formatJSONResponse } from "@libs/APIResponses";
 import { saveTodoByUser } from "@dao/todo.dao";
 import {
   useHooks,
@@ -8,6 +7,7 @@ import {
   handleUnexpectedError,
 } from "lambda-hooks";
 import { getCognitoIdentityId } from "@libs/Helper";
+import { APIGatewayResponse } from "@libs/APIResponses";
 
 const withHooks = useHooks({
   before: [logEvent, parseEvent],
@@ -20,13 +20,12 @@ const handler = async (event: APIGatewayProxyEvent) => {
   const body = event?.body;
   const description = body?.description;
   if (!description) {
-    return formatJSONResponse({
-      statusCode: 400,
-      body: { error: "Description is required!" },
+    return APIGatewayResponse.R400({
+      error: "Description is required!",
     });
   }
   const todos = await saveTodoByUser(cognitoIdentityId, description);
-  return formatJSONResponse({ body: todos });
+  return APIGatewayResponse.R200({ data: todos });
 };
 
 exports.handler = withHooks(handler);

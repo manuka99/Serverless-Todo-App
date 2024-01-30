@@ -1,5 +1,4 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { formatJSONResponse } from "@libs/APIResponses";
 import { deleteTodoByUser } from "@dao/todo.dao";
 import {
   useHooks,
@@ -8,6 +7,7 @@ import {
   handleUnexpectedError,
 } from "lambda-hooks";
 import { getCognitoIdentityId } from "@libs/Helper";
+import { APIGatewayResponse } from "@libs/APIResponses";
 
 const withHooks = useHooks({
   before: [logEvent, parseEvent],
@@ -20,16 +20,13 @@ const handler = async (event: APIGatewayProxyEvent) => {
   const body = event?.body;
   const todoId = body?.todo_id;
   if (!todoId) {
-    return formatJSONResponse({
-      statusCode: 400,
-      body: { error: "Invalid Todo!" },
+    return APIGatewayResponse.R400({
+      error: "Invalid Todo!",
     });
   }
   await deleteTodoByUser(cognitoIdentityId, todoId);
-  return formatJSONResponse({
-    body: {
-      message: "Item was deleted successfully",
-    },
+  return APIGatewayResponse.R200({
+    message: "Item was deleted successfully",
   });
 };
 

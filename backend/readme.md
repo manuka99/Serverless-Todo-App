@@ -8,6 +8,4 @@ aws cognito-idp admin-confirm-sign-up --region us-east-1 --user-pool-id us-east-
 
 <!-- Authenticate (get tokens) -->
 
-aws cognito-idp admin-initiate-auth --region us-east-1 --cli-input-json file://auth.json
-
 aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id 1uv5bvmdhjjiclielv6dphi6fm --auth-parameters USERNAME=admin@gmail.com,PASSWORD=password123
