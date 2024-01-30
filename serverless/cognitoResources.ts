@@ -23,7 +23,7 @@ const CognitoResources: AWS["resources"]["Resources"] = {
     Properties: {
       ClientName: "${sls:stage}-${self:service}-user-pool-client",
       UserPoolId: { Ref: "CognitoUserPool" },
-      ExplicitAuthFlows: ["ADMIN_NO_SRP_AUTH"],
+      ExplicitAuthFlows: ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"],
       GenerateSecret: false,
       SupportedIdentityProviders: ["COGNITO"],
     },

@@ -69,6 +69,12 @@ const serverlessConfiguration: AWS = {
           Name: 'UserPoolId',
         },
       },
+      UserPoolClientId: {
+        Value: { Ref: 'CognitoUserPoolClient' },
+        Export: {
+          Name: 'UserPoolClientId',
+        },
+      },
     },
   },
 };
