@@ -37,7 +37,7 @@ export const saveTodoByUser = async (
   return params.Item as Todo;
 };
 
-export const  deleteTodoByUser = async (
+export const deleteTodoByUser = async (
   userId: string,
   todoId: string
 ): Promise<void> => {

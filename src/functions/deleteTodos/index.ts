@@ -19,6 +19,12 @@ const handler = async (event: APIGatewayProxyEvent) => {
   const cognitoIdentityId = getCognitoIdentityId(event);
   const body = event?.body;
   const todoId = body?.todo_id;
+  if (!todoId) {
+    return formatJSONResponse({
+      statusCode: 400,
+      body: { error: "Invalid Todo!" },
+    });
+  }
   await deleteTodoByUser(cognitoIdentityId, todoId);
   return formatJSONResponse({
     body: {

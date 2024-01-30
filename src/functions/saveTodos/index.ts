@@ -19,7 +19,12 @@ const handler = async (event: APIGatewayProxyEvent) => {
   const cognitoIdentityId = getCognitoIdentityId(event);
   const body = event?.body;
   const description = body?.description;
-  if (!description) throw new Error("Description is required!");
+  if (!description) {
+    return formatJSONResponse({
+      statusCode: 400,
+      body: { error: "Description is required!" },
+    });
+  }
   const todos = await saveTodoByUser(cognitoIdentityId, description);
   return formatJSONResponse({ body: todos });
 };
