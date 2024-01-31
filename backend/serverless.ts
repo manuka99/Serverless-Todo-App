@@ -58,22 +58,38 @@ const serverlessConfiguration: AWS = {
     },
     Outputs: {
       TodosTableName: {
-        Value: '${self:custom.tables.Todos}',
+        Value: "${self:custom.tables.Todos}",
         Export: {
-          Name: 'TodosTableName',
+          Name: "TodosTableName",
         },
       },
       UserPoolId: {
-        Value: { Ref: 'CognitoUserPool' },
+        Value: { Ref: "CognitoUserPool" },
         Export: {
-          Name: 'UserPoolId',
+          Name: "UserPoolId",
         },
       },
       UserPoolClientId: {
-        Value: { Ref: 'CognitoUserPoolClient' },
+        Value: { Ref: "CognitoUserPoolClient" },
         Export: {
-          Name: 'UserPoolClientId',
+          Name: "UserPoolClientId",
         },
+      },
+      CognitoUserPoolClientSecret: {
+        Value: {
+          'Fn::GetAtt': ['CognitoUserPoolClient', 'ClientSecret'],
+        },
+        Export: {
+          Name: "CognitoUserPoolClientSecret",
+        },
+        Description: "Cognito User Pool Client Secret",
+      },
+      CognitoIssuerUrl: {
+        Value: {
+          "Fn::Sub":
+            "https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com",
+        },
+        Description: "Cognito Issuer URL",
       },
     },
   },
