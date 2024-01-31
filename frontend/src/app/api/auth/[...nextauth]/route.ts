@@ -1,18 +1,36 @@
 import NextAuth from "next-auth";
 import CognitoProvider from "next-auth/providers/cognito";
 
-console.log(process.env.COGNITO_CLIENT_ID);
-console.log(process.env.COGNITO_CLIENT_SECRET);
-console.log(process.env.COGNITO_ISSUER);
-
 export const authOptions = {
   providers: [
     CognitoProvider({
       clientId: process.env.COGNITO_CLIENT_ID as string,
       clientSecret: process.env.COGNITO_CLIENT_SECRET as string,
       issuer: process.env.COGNITO_ISSUER,
+      idToken: true,
+      checks: "nonce",
     }),
   ],
+  callbacks: {
+    // jwt: async (props: any) => {
+    //   const {
+    //     accessToken,
+    //     idToken,
+    //     accessTokenExpires,
+    //     refreshToken,
+    //     user,
+    //     profile,
+    //   } = props?.token || {};
+    //   return {
+    //     accessToken,
+    //     idToken,
+    //     accessTokenExpires,
+    //     refreshToken,
+    //     user,
+    //     profile,
+    //   };
+    // },
+  },
 };
 
 const handler = NextAuth(authOptions);

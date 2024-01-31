@@ -50,12 +50,8 @@ export default function Home() {
 
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center">
-      <p className="text-2xl mb-2">
-        Welcome User.
-      </p>
-      <p className="text-2xl mb-2">
-        You must sign in to manage your Todos.
-      </p>
+      <p className="text-2xl mb-2">Welcome User.</p>
+      <p className="text-2xl mb-2">You must sign in to manage your Todos.</p>
       <button
         className="bg-none border-gray-300 border py-2 px-6 rounded-md mb-2 bg-gray-200 text-black"
         onClick={() => signIn()}
