@@ -12,24 +12,16 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    // jwt: async (props: any) => {
-    //   const {
-    //     accessToken,
-    //     idToken,
-    //     accessTokenExpires,
-    //     refreshToken,
-    //     user,
-    //     profile,
-    //   } = props?.token || {};
-    //   return {
-    //     accessToken,
-    //     idToken,
-    //     accessTokenExpires,
-    //     refreshToken,
-    //     user,
-    //     profile,
-    //   };
-    // },
+    jwt: async ({ token, account, user }: any) => {
+      if (account) token.account = account;
+      if (user) token.user = user;
+      return token;
+    },
+    async session({ session, token, user }: any) {
+      session.account = token?.account;
+      session.user = token?.user;
+      return session;
+    },
   },
 };
 

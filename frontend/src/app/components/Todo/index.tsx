@@ -1,9 +1,87 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TodoItem from "./TodoItem";
+import { useSession } from "next-auth/react";
+import {
+  deleteTodoByUser,
+  getTodosForUser,
+  saveTodoByUser,
+} from "@/app/services/Todo.s";
+import { Todo } from "@/app/model/Todo.m";
 
 const Todo = () => {
-  const addTodo = async () => {};
+  const { data: session } = useSession();
+  const [todos, setTodos] = useState<Todo[]>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [description, setDescription] = useState<undefined | string | null>();
+
+  useEffect(() => {
+    fetchTodo();
+  }, [session?.user]);
+
+  const fetchTodo = async () => {
+    try {
+      setLoading(true);
+      // @ts-ignore
+      const idToken: string = session?.account?.id_token;
+      if (!idToken) return;
+      const _todos = await getTodosForUser(idToken);
+      setTodos(_todos);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addTodo = async () => {
+    try {
+      setLoading(true);
+      // @ts-ignore
+      const idToken: string = session?.account?.id_token;
+      if (!idToken) return;
+      if (!description) {
+        return alert("Description is required!");
+      }
+      await saveTodoByUser(idToken, description);
+      alert("Todo was added successfully");
+      setDescription(null);
+      fetchTodo();
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const deleteTodo = async (todoId: string) => {
+    try {
+      setLoading(true);
+      // @ts-ignore
+      const idToken: string = session?.account?.id_token;
+      if (!idToken) return;
+      if (!todoId) {
+        return alert("Todo Id is required!");
+      }
+      await deleteTodoByUser(idToken, todoId);
+      alert("Todo was deleted successfully");
+      fetchTodo();
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const onChangeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(e.target.value);
+  };
+
+  if (loading)
+    return (
+      <div className="p-4">
+        <p className="text-lg font-bold text-white">Loading....</p>
+      </div>
+    );
+
   return (
     <div className="flex w-full p-2 flex-col">
       {/* add todo */}
@@ -13,6 +91,8 @@ const Todo = () => {
           id="rounded-email"
           className="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
           placeholder="Todo Description"
+          value={description || ""}
+          onChange={onChangeDescription}
         />
         <button
           className="bg-blue-600 text-sm font-bold py-2 px-4 rounded-md"
@@ -24,7 +104,9 @@ const Todo = () => {
       {/* end add todo */}
       {/* start display todo */}
       <div className="flex flex-col gap-1 overflow-y-auto my-4">
-        <TodoItem />
+        {todos?.map((todo) => (
+          <TodoItem key={todo?.todo_id} data={todo} deleteTodo={deleteTodo} />
+        ))}
       </div>
       {/* end display todo */}
     </div>
