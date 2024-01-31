@@ -2,6 +2,8 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Todo from "./components/Todo";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -12,15 +14,15 @@ export default function Home() {
   if (session) {
     return (
       <div className="w-full h-screen flex items-start justify-center">
-        <div className="flex max-w-[700px] w-[90%] max-h-[100%] flex flex-col justify-center items-center gap-4">
-          <div className="flex justify-between items-center w-full mt-6">
+        <div className="flex max-w-[700px] w-[100%] max-h-[100%] flex flex-col justify-center items-center gap-4">
+          <div className="flex justify-between items-center w-full mt-6 flex-wrap p-2">
             <div className="flex gap-2 mb-4">
               <Image
                 src={"/images/user-icon.png"}
                 width={45}
                 height={45}
                 alt="user-icon"
-                className="object-cover rounded-full"
+                className="object-cover rounded-full hidden sm:block"
               />
               <div className="flex flex-col gap-1 text-sm">
                 <p>Welcome {username}!</p>
@@ -39,11 +41,12 @@ export default function Home() {
               </button>
             </div>
           </div>
-          <div className="flex w-full h-full bg-gray-600 rounded-md flex flex-col items-center">
-            <p className="text-4xl font-bold my-6">My Todos</p>
+          <div className="flex w-full h-full flex flex-col items-center">
+            <p className="text-2xl md:text-4xl font-bold my-6">My Todos</p>
             <Todo />
           </div>
         </div>
+        <ToastContainer />
       </div>
     );
   }

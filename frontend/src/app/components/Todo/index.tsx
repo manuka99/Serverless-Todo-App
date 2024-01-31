@@ -8,6 +8,7 @@ import {
   saveTodoByUser,
 } from "@/app/services/Todo.s";
 import { Todo } from "@/app/model/Todo.m";
+import { toast } from "react-toastify";
 
 const Todo = () => {
   const { data: session } = useSession();
@@ -19,7 +20,7 @@ const Todo = () => {
     fetchTodo();
   }, [session?.user]);
 
-  const fetchTodo = async () => {
+  const fetchTodo = async (): Promise<void> => {
     try {
       // @ts-ignore
       const idToken: string = session?.account?.id_token;
@@ -40,11 +41,12 @@ const Todo = () => {
       const idToken: string = session?.account?.id_token;
       if (!idToken) return;
       if (!description) {
-        return alert("Description is required!");
+        toast.error("Description is required!");
+        return;
       }
       setLoading(true);
       await saveTodoByUser(idToken, description);
-      alert("Todo was added successfully");
+      toast.success("Todo was added successfully");
       setDescription(null);
       fetchTodo();
     } catch (error) {
@@ -59,11 +61,12 @@ const Todo = () => {
       const idToken: string = session?.account?.id_token;
       if (!idToken) return;
       if (!todoId) {
-        return alert("Todo Id is required!");
+        toast.error("Todo Id is required!");
+        return;
       }
       setLoading(true);
       await deleteTodoByUser(idToken, todoId);
-      alert("Todo was deleted successfully");
+      toast.success("Todo was deleted successfully");
       fetchTodo();
     } catch (error) {
       console.log(error);
@@ -83,9 +86,9 @@ const Todo = () => {
     );
 
   return (
-    <div className="flex w-full p-2 flex-col">
+    <div className="flex w-full p-2 flex-col overflow-hidden">
       {/* add todo */}
-      <div className="flex gap-2 w-[75%]">
+      <div className="flex gap-2">
         <input
           type="text"
           id="rounded-email"
@@ -98,7 +101,7 @@ const Todo = () => {
           className="bg-blue-600 text-sm font-bold py-2 px-4 rounded-md"
           onClick={addTodo}
         >
-          Add Todo
+          Add New Todo
         </button>
       </div>
       {/* end add todo */}

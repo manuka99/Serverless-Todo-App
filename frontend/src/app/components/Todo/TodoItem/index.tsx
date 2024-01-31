@@ -9,8 +9,8 @@ interface TodoItem {
 
 const TodoItem = ({ data, deleteTodo }: TodoItem) => {
   return (
-    <div className="flex w-full h-[60px] items-center justify-between bg-gray-800 p-4 rounded-md">
-      <p className="capitalize">{data.description}</p>
+    <div className="flex w-full min-h-[70px] items-center justify-between bg-gray-800 p-4 rounded-md">
+      <p className="capitalize break-all">{data.description}</p>
       <button
         className="bg-red-800 text-sm font-bold py-1 px-2 rounded-md"
         onClick={() => deleteTodo(data.todo_id)}
