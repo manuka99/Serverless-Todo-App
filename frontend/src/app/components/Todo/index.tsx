@@ -21,10 +21,10 @@ const Todo = () => {
 
   const fetchTodo = async () => {
     try {
-      setLoading(true);
       // @ts-ignore
       const idToken: string = session?.account?.id_token;
       if (!idToken) return;
+      setLoading(true);
       const _todos = await getTodosForUser(idToken);
       setTodos(_todos);
     } catch (error) {
@@ -36,13 +36,13 @@ const Todo = () => {
 
   const addTodo = async () => {
     try {
-      setLoading(true);
       // @ts-ignore
       const idToken: string = session?.account?.id_token;
       if (!idToken) return;
       if (!description) {
         return alert("Description is required!");
       }
+      setLoading(true);
       await saveTodoByUser(idToken, description);
       alert("Todo was added successfully");
       setDescription(null);
@@ -55,13 +55,13 @@ const Todo = () => {
 
   const deleteTodo = async (todoId: string) => {
     try {
-      setLoading(true);
       // @ts-ignore
       const idToken: string = session?.account?.id_token;
       if (!idToken) return;
       if (!todoId) {
         return alert("Todo Id is required!");
       }
+      setLoading(true);
       await deleteTodoByUser(idToken, todoId);
       alert("Todo was deleted successfully");
       fetchTodo();
