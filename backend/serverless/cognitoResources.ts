@@ -23,7 +23,10 @@ const CognitoResources: AWS["resources"]["Resources"] = {
     Properties: {
       ClientName: "${sls:stage}-${self:service}-user-pool-client",
       UserPoolId: { Ref: "CognitoUserPool" },
-      CallbackURLs: ["http://localhost:3000/api/auth/callback/cognito"],
+      CallbackURLs: [
+        "http://localhost:3000/api/auth/callback/cognito",
+        "https://serverless-todo-app-mu.vercel.app/api/auth/callback/cognito",
+      ],
       ExplicitAuthFlows: [
         "ALLOW_REFRESH_TOKEN_AUTH",
         "ALLOW_USER_SRP_AUTH",
