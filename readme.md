@@ -1,7 +1,7 @@
 # AWS Serverless Todo App
 
 ## Overview
-This project is a simple Todo application built on the AWS serverless stack. Users can authenticate using AWS Cognito, add and delete Todo items, and the application stores data in DynamoDB. The infrastructure is defined as code (IAC) using the Serverless Framework with TypeScript, making it easy to deploy resources across different projects and regions.
+This project is a Todo application built on the AWS serverless stack. Users can authenticate using AWS Cognito, add and delete Todo items, and the application stores data in DynamoDB. The infrastructure is defined as code (IAC) using the Serverless Framework with TypeScript, making it easy to deploy resources across different projects and regions.
 
 Demo :earth_asia: https://serverless-todo-app-mu.vercel.app/
 
