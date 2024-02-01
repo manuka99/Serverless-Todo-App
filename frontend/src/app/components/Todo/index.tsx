@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 
 const Todo = () => {
   const { data: session } = useSession();
-  const [todos, setTodos] = useState<Todo[]>();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [description, setDescription] = useState<undefined | string | null>();
 
@@ -107,9 +107,17 @@ const Todo = () => {
       {/* end add todo */}
       {/* start display todo */}
       <div className="flex flex-col gap-1 overflow-y-auto my-4">
-        {todos?.map((todo) => (
-          <TodoItem key={todo?.todo_id} data={todo} deleteTodo={deleteTodo} />
-        ))}
+        {todos.length > 0 ? (
+          todos.map((todo) => (
+            <TodoItem key={todo?.todo_id} data={todo} deleteTodo={deleteTodo} />
+          ))
+        ) : (
+          <div className="flex w-full items-center justify-center p-4">
+            <p className="text-lg md:text-xl font-bold text-yellow-200">
+              No Todos Found. Start by creating your first Todo!
+            </p>
+          </div>
+        )}
       </div>
       {/* end display todo */}
     </div>
